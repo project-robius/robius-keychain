@@ -1,0 +1,29 @@
+[package]
+name = "robius-keychain"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cfg-if = "1.0.0"
+
+[target.'cfg(target_vendor = "apple")'.dependencies]
+security-framework = "=2.11.1"
+# Pin version to same version used by security-framework to avoid an extra dependency.
+core-foundation = "^0.9.4"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+libsecret = "=0.5.0"
+# Pin version to same version as used by libsecret to avoid extra dependencies.
+gio = "^0.19"
+glib = "^0.19"
+
+[target.'cfg(target_os = "windows")'.dependencies.windows]
+version = "0.58.0"
+features = [
+    "Win32_Security_Credentials",
+]
+
+[target.'cfg(target_os = "windows")'.dependencies]
+# Pin version to same version used by windows to avoid an extra dependency.
+windows-result = "^0.2.0"
+
