@@ -6,10 +6,13 @@ edition = "2021"
 [dependencies]
 cfg-if = "1.0.0"
 
+[target.'cfg(target_vendor = "apple")'.dependencies.security-framework]
+git = "https://github.com/project-robius/rust-security-framework.git" 
+branch = "update-delete-keychain-item"
+
 [target.'cfg(target_vendor = "apple")'.dependencies]
-security-framework = "=2.11.1"
 # Pin version to same version used by security-framework to avoid an extra dependency.
-core-foundation = "^0.9.4"
+core-foundation = "0.10"
 
 [target.'cfg(target_os = "linux")'.dependencies]
 libsecret = "=0.5.0"
