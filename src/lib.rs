@@ -59,6 +59,7 @@ impl Default for Class {
 }
 
 impl<'a> KeychainItemBuilder<'a> {
+    /// Creates a new `KeychainItemBuilder.
     pub fn new(service: &'a str, secret: &'a str) -> Self {
         Self {
             service,
