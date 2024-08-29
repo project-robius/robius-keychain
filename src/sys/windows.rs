@@ -72,9 +72,12 @@ pub fn update(identifier: &Identifier, options: UpdateOptions) -> Result<()> {
         Ok(target(service, username))
     };
 
+    // TODO: Unwraps
     let (_target, target) = match (options.service, options.username) {
         (Some(service), username) => f(service, username)?,
         (None, Some(username)) => {
+            // TODO: Could also just use the service stored in the identifier.
+
             // SAFETY: Pointer supplied by Windows must be valid.
             let previous_target_name = unsafe { previous_cred.TargetName.to_string() }.unwrap();
             // SAFETY: Pointer supplied by Windows must be valid.
