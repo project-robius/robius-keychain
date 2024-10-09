@@ -1,7 +1,7 @@
 use core_foundation::data::CFData;
 use security_framework::item::{
-    add_item, delete_item, update_item, ItemAddOptions, ItemAddValue, ItemClass, ItemSearchOptions,
-    ItemUpdateOptions, SearchResult,
+    update_item, ItemAddOptions, ItemAddValue, ItemClass, ItemSearchOptions, ItemUpdateOptions,
+    ItemUpdateValue, SearchResult,
 };
 
 use crate::{Class, Error, Identifier, KeychainItemBuilder, Result, UpdateOptions};
@@ -16,7 +16,7 @@ pub fn store(item: KeychainItemBuilder) -> Result<()> {
     }
     options.set_service(item.service);
 
-    add_item(options.to_dictionary()).map_err(Error)
+    options.add().map_err(Error)
 }
 
 pub fn load(identifier: &Identifier) -> Result<Option<String>> {
@@ -39,29 +39,19 @@ pub fn update(identifier: &Identifier, options: UpdateOptions) -> Result<()> {
         sf_options.set_service(service);
     }
     if let Some(secret) = options.secret {
-        sf_options
-            .set_value(ItemAddValue::Data {
-                // This is ignored as we set class to `None`.
-                class: ItemClass::generic_password(),
-                data: CFData::from_buffer(secret.as_ref()),
-            })
-            .set_class(None);
+        sf_options.set_value(ItemUpdateValue::Data(CFData::from_buffer(secret.as_ref())));
     }
     if let Some(class) = options.class {
-        sf_options.set_class(Some(convert_class(class)));
+        sf_options.set_class(convert_class(class));
     }
     if let Some(username) = options.username {
         sf_options.set_account_name(username);
     }
-    update_item(
-        search_options(identifier).to_dictionary(),
-        sf_options.to_dictionary(),
-    )
-    .map_err(Error)
+    update_item(&search_options(identifier), &sf_options).map_err(Error)
 }
 
 pub fn delete(identifier: &Identifier) -> Result<()> {
-    delete_item(search_options(identifier).to_dictionary()).map_err(Error)
+    search_options(identifier).delete().map_err(Error)
 }
 
 fn search_options(identifier: &Identifier) -> ItemSearchOptions {
