@@ -17,9 +17,8 @@ features = ["derive"]
 version = "1.0.128"
 
 [target.'cfg(target_vendor = "apple")'.dependencies.security-framework]
-path = "../../rust-security-framework/security-framework"
-# git = "https://github.com/project-robius/rust-security-framework.git" 
-# branch = "update-delete-keychain-item"
+git = "https://github.com/project-robius/rust-security-framework.git" 
+branch = "update-delete-keychain-item"
 
 [target.'cfg(target_vendor = "apple")'.dependencies]
 # Pin version to same version used by security-framework to avoid an extra dependency.
