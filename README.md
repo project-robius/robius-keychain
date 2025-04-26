@@ -4,7 +4,7 @@ A library for managing keychain items.
 ## Dependencies
 ### Linux
 Require libsecret development libraries
-```
+```bash
 # Ubuntu
 sudo apt install libsecret-1-dev
 # Fedora
@@ -12,7 +12,7 @@ sudo dnf install libsecret-devel
 ```
 
 ## Examples
-```
+```rust
 let secret = "hunter2";
 
 let id = robius_keychain::KeychainItemBuilder::new("hello_world", &secret)
